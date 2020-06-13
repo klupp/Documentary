@@ -12,7 +12,6 @@ case $CMD in
 create)
 	echo "Createing project '$2'"
 	python $BASEDIR/create_project_script.py $2
-	cd $2
 	;;
 add-page)
 	echo "Adding new page"
