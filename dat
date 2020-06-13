@@ -17,6 +17,7 @@ create)
 add-page)
 	echo "Adding new page"
 	python $BASEDIR/create_page_script.py
+	;;
 --help)
 	echo "$HELP"
 	;;
