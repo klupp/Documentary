@@ -10,11 +10,11 @@ ARG1=$2
 
 case $CMD in
 create)
-	python $BASEDIR/create_project_script.py $2
+	python $BASEDIR/create_project_script.py $2 "$@"
 	echo "New project '$2' created"
 	;;
 add-page)
-	python $BASEDIR/create_page_script.py
+	python $BASEDIR/create_page_script.py "$@"
 	echo "New page added"
 	;;
 --help)
