@@ -1,0 +1,26 @@
+#!/bin/bash
+
+BASEDIR=$(dirname "$0")
+echo "$BASEDIR"
+
+HELP=$'Supported commands:\ndat --help\ndat create project_name\ndat add-page'
+
+CMD=$1
+ARG1=$2
+
+case $CMD in
+create)
+	echo "Createing project '$2'"
+	python $BASEDIR/create_project_script.py $2
+	cd $2
+	;;
+add-page)
+	echo "Adding new page"
+	python $BASEDIR/create_page_script.py
+--help)
+	echo "$HELP"
+	;;
+*)
+	echo "dat: '$1' is not a dat command. See 'dat --help'."
+	;;
+esac
