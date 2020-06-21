@@ -6,7 +6,9 @@ def main(argv):
     if not os.path.isdir("./.dat"):
         print("The current directory is not a dat project.")
     try:
-        opts, args = getopt.getopt(argv, "hp:f:", ["position=", "format="])
+        opts, args = getopt.getopt(argv, "hp:f:", ["help", "position=", "format="])
+        if len(args) > 0:
+            raise Exception("Unexpected arguments")
     except getopt.GetoptError:
         print('-p <position> -f <format>')
         sys.exit(2)
@@ -17,7 +19,7 @@ def main(argv):
     position = size + 1
     page_format = "A4"
     for opt, arg in opts:
-        if opt == '-h':
+        if opt in ('-h', "--help"):
             print('-p <position> -f <format>')
             sys.exit()
         elif opt in ("-p", "--position"):

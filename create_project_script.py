@@ -3,6 +3,9 @@ import pandas as pd
 
 
 def main(argv):
+    if len(argv) > 1:
+        raise Exception("Unexpected arguments")
+
     path = argv[0] # get the path to the project from the arguments
     try:
         os.makedirs(path) # create directory where the dat project will be kept
