@@ -27,6 +27,15 @@ add-page)
         echo "Exception occurred"
     }
     ;;
+remove-page)
+    {
+        python $BASEDIR/remove_page_script.py "$@" &&
+        echo "Remove page $2"
+	} ||
+    {
+        echo "Exception occurred"
+    }
+    ;;
 --help)
 	echo "$HELP"
 	;;
