@@ -46,3 +46,10 @@ def insert_row(cursor, table, columns, values):
         table=table, columns=', '.join(columns), values=', '.join(values))
     print(command)
     execute_command(cursor, command)
+    
+    
+def delete_row(cursor, table, condition):
+    command = """DELETE FROM {table} WHERE {condition};""".format(
+        table=table, condition=condition)
+    print(command)
+    execute_command(cursor, command)

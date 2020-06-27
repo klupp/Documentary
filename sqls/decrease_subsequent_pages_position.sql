@@ -1,0 +1,1 @@
+UPDATE pages SET pageNum = pageNum - 1 WHERE pageNum > {position};
