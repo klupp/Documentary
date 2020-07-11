@@ -1,36 +1,23 @@
-import sys, os, getopt
+import os
+
+from argparse import ArgumentParser
 
 from utils import properties, sqlite
+from utils.dat_project_decorator import dat_project
+
+parser = ArgumentParser(description="Remove page from the `dat` project.")
+parser.add_argument("-p", "--position", help="The position of the page to be removed.", type=int, required=True)
 
 
-def main(argv):
-    if not os.path.isdir("./.dat"):
-        raise Exception("The current directory is not a dat project.")
-    try:
-        opts, args = getopt.getopt(argv, "hp:", ["help", "position="])
-        if len(args) > 0:
-            raise Exception("Unexpected arguments")
-    except getopt.GetoptError:
-        print('-p <position>')
-        sys.exit(2)
-        
+@dat_project
+def main(position):
     os.chdir("./.dat")
     
     last_page = properties.read_property('', 'lastPage')
-    position = -1
-    for opt, arg in opts:
-        if opt in ('-h', "--help"):
-            print('-p <position>')
-            sys.exit()
-        elif opt in ("-p", "--position"):
-            if int(arg) > last_page:
-                raise Exception('The number of existing pages is ' + str(size) +
-                      '. The position must be less or equal to ' + str(size))
-            position = int(arg)
-    
-    if position == -1:
-        raise Exception('The position of the page must be given. Check help for more information.')
-    
+
+    if position > last_page:
+        raise Exception('The number of existing pages is ' + str(last_page) +
+                        '. The position must be less or equal to ' + str(last_page))
     
     connection = sqlite.open_connection('database.db')
     cursor = connection.cursor()
@@ -44,4 +31,5 @@ def main(argv):
     
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    args = parser.parse_args()
+    main(args.position)

@@ -1,42 +1,29 @@
 import sys, os, getopt
 import pandas as pd
 import uuid
+from argparse import ArgumentParser
 
 from pathlib import Path
-from utils import sqlite
+from utils import sqlite, properties
+from utils.dat_project_decorator import dat_project
 
-def main(argv):
-    if not os.path.isdir("./.dat"):
-        print("The current directory is not a dat project.")
-    try:
-        opts, args = getopt.getopt(argv, "hn:s:", ["help", "source=", "name="])
-    except getopt.GetoptError:
-        print('-s <source-path> -n <name>')
-        sys.exit(2)
+parser = ArgumentParser(description="Create new `dat` project")
+parser.add_argument("path", help="path to the datasource file.", metavar="FILE")
+parser.add_argument("-n", "--name", help="name the datasource (you will use this name later for reference). "
+                                         "If name not provided the name of the file will be used.")
+
+
+@dat_project
+def main(path, req_name):
         
     os.chdir("./.dat")
-    
-    path = ''
-    name = ''
-    
-    for opt, arg in opts:
-        if opt in ('-h', "--help"):
-            print('<source-path> -n <name>')
-            sys.exit()
-        elif opt in ("-s", "--source"):
-            path = arg
-        elif opt in ("-n", "--name"):
-            name = arg
-            
-    if path == '':
-        print("You must specify a name for the data source that you want to load")
-        print('-s <source> -n <name>')
-        sys.exit(2)
-        
+
     project_name = str(uuid.uuid4()) + ".csv"
-    if name == '':
-        name = Path(path).stem
+    name = Path(path).stem
     source_format = 'csv'
+    
+    if req_name is not None:
+        name = req_name
     
     connection = sqlite.open_connection('database.db')
     cursor = connection.cursor()
@@ -44,10 +31,11 @@ def main(argv):
                       ['"{path}"'.format(path=path), '"{path}"'.format(path=project_name),
                        '"{name}"'.format(name=name), '"{var}"'.format(var=source_format)])
     sqlite.close_connection(connection)
-    
+
     data = pd.read_csv(path)
     data.to_csv('datasources/' + project_name)
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    args = parser.parse_args()
+    main(args.path, args.name)

@@ -1,37 +1,30 @@
-import sys, os, getopt
+import os
+
+from argparse import ArgumentParser
 
 from utils import properties, sqlite
+from utils.dat_project_decorator import dat_project
 
-def main(argv):
-    if not os.path.isdir("./.dat"):
-        print("The current directory is not a dat project.")
-    try:
-        opts, args = getopt.getopt(argv, "hp:f:", ["help", "position=", "format="])
-        if len(args) > 0:
-            raise Exception("Unexpected arguments")
-    except getopt.GetoptError:
-        print('-p <position> -f <format>')
-        sys.exit(2)
-       
+parser = ArgumentParser(description="Create new page in the `dat` project.")
+parser.add_argument("-p", "--position", help="Position on which the page will be added.", type=int)
+parser.add_argument("-f", "--format", help="Format of the page.", choices=['A4'], default='A4')
+
+
+@dat_project
+def main(req_position, page_format):
     # setup the current directory to be .dat
     os.chdir("./.dat")
-    
+
     last_page = properties.read_property('', 'lastPage')
-    position = last_page + 1
-    page_format = "A4"
-    
-    for opt, arg in opts:
-        if opt in ('-h', "--help"):
-            print('-p <position> -f <format>')
-            sys.exit()
-        elif opt in ("-p", "--position"):
-            if int(arg) > (last_page + 1):
-                raise Exception('The number of existing pages is ' + str(size) +
-                      '. The position must be less or equal to ' + str(size + 1))
-            position = int(arg)
-        elif opt in ("-f", "--format"):
-            page_format = arg
-    
+    if req_position is None:
+        position = last_page + 1
+    else:
+        if req_position > (last_page + 1):
+            raise Exception('The number of existing pages is ' + str(last_page) +
+                            '. The position must be less or equal to ' + str(last_page + 1))
+        position = req_position
+
+    print(position, page_format)
     connection = sqlite.open_connection('database.db')
     cursor = connection.cursor()
     if position != last_page + 1:
@@ -43,4 +36,5 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    args = parser.parse_args()
+    main(args.position, args.format)
