@@ -54,9 +54,9 @@ remove-datasource)
         echo "Exception occurred"
     }
     ;;
-reload-datasource)
+reload-datasource-one)
     {
-        python $BASEDIR/reload_data_script.py "$@" &&
+        python $BASEDIR/reload_data_one_script.py "$@" &&
         echo "Loading data $2"
 	} ||
     {
