@@ -12,7 +12,7 @@ CREATE TABLE layers (
     CHECK (format IN ('A4'))
 );
 
-CREATE TABLE pageLayerMap(
+CREATE TABLE pageLayerMap (
     pageId INTEGER NOT NULL,
     layerId INTEGER NOT NULL,
     layerOrder INTEGER,
@@ -20,4 +20,13 @@ CREATE TABLE pageLayerMap(
     UNIQUE (pageId, layerId, layerOrder),
     FOREIGN KEY (pageId) REFERENCES pages(pageId),
     FOREIGN KEY (layerId) REFERENCES pages(layerId)
+);
+
+CREATE TABLE dataSources (
+    sourceId INTEGER not NULL PRIMARY KEY AUTOINCREMENT,
+    sourcePath TEXT UNIQUE,
+    projectPath TEXT UNIQUE,
+    name TEXT UNIQUE,
+    format TEXT,
+    CHECK (format IN ('csv'))
 );

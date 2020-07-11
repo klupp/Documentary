@@ -11,6 +11,7 @@ def main(argv):
     try:
         os.makedirs(path) # create directory where the dat project will be kept
         os.mkdir(path + "/.dat") # inside create the .dat folder
+        os.mkdir(path + "/.dat/datasources") # create directory where the data sources will be kept
 #         os.chdir(path + "/.dat") # change directory
     except FileExistsError:
         print("Directory " , path ,  " already exists. Choose another name.")
@@ -29,15 +30,6 @@ def main(argv):
     # create project properties
     print(path_project)
     properties.create_properties_file(path_project)
-    
-
-#     pages = pd.DataFrame(columns=["pageId", "format", "pageNum"])
-#     pages.to_csv("pages.csv", index=False)
-#     layers = pd.DataFrame(columns=["layerId", "format", "ref"])
-#     layers.to_csv("layers.csv", index=False)
-#     pageLayerMap = pd.DataFrame(columns = ["pageId", "layerId", "order"])
-#     pageLayerMap.to_csv("pageLayerMap.csv", index=False)
-
 
 
 if __name__ == "__main__":
