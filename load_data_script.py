@@ -3,38 +3,40 @@ import pandas as pd
 import uuid
 
 from pathlib import Path
-from utils import sqlite, properties
+from utils import sqlite
 
 def main(argv):
     if not os.path.isdir("./.dat"):
         print("The current directory is not a dat project.")
     try:
-        opts, args = getopt.getopt(argv, "hn:", ["help", "name="])
-        if len(args) < 1:
-            raise Exception("Please give the path to the source")
-        if len(args) > 3:
-            raise Exception("Unexpected arguments")
+        opts, args = getopt.getopt(argv, "hn:s:", ["help", "source=", "name="])
     except getopt.GetoptError:
-        print('<source-path> -n <name>')
+        print('-s <source-path> -n <name>')
         sys.exit(2)
         
     os.chdir("./.dat")
-        
-    path = args[0]
-    print(path)
-    project_name = str(uuid.uuid4()) + ".csv"
-    name = Path(path).stem
-    source_format = 'csv'
+    
+    path = ''
+    name = ''
     
     for opt, arg in opts:
         if opt in ('-h', "--help"):
             print('<source-path> -n <name>')
             sys.exit()
+        elif opt in ("-s", "--source"):
+            path = arg
         elif opt in ("-n", "--name"):
             name = arg
             
-    data = pd.read_csv(path)
-    data.to_csv('datasources/' + project_name)
+    if path == '':
+        print("You must specify a name for the data source that you want to load")
+        print('-s <source> -n <name>')
+        sys.exit(2)
+        
+    project_name = str(uuid.uuid4()) + ".csv"
+    if name == '':
+        name = Path(path).stem
+    source_format = 'csv'
     
     connection = sqlite.open_connection('database.db')
     cursor = connection.cursor()
@@ -42,6 +44,9 @@ def main(argv):
                       ['"{path}"'.format(path=path), '"{path}"'.format(path=project_name),
                        '"{name}"'.format(name=name), '"{var}"'.format(var=source_format)])
     sqlite.close_connection(connection)
+    
+    data = pd.read_csv(path)
+    data.to_csv('datasources/' + project_name)
 
 
 if __name__ == "__main__":

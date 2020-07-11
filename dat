@@ -56,7 +56,7 @@ remove-datasource)
     ;;
 reload-datasource)
     {
-        python $BASEDIR/load_data_script.py "$@" &&
+        python $BASEDIR/reload_data_script.py "$@" &&
         echo "Loading data $2"
 	} ||
     {
