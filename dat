@@ -11,8 +11,15 @@ shift
 case $CMD in
 create)
 	{
-        python $BASEDIR/create_project_script.py "$@" &&
-        echo "New project '$1' created"
+        python $BASEDIR/create_project_script.py "$@"
+	} ||
+    {
+        echo "Exception occurred"
+    }
+	;;
+init)
+	{
+        python $BASEDIR/init_project_script.py "$@"
 	} ||
     {
         echo "Exception occurred"
