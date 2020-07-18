@@ -45,7 +45,6 @@ def execute_command(cursor, command):
 def insert_row(cursor, table, columns, values):
     command = """INSERT INTO {table} ({columns}) VALUES ({values});""".format(
         table=table, columns=', '.join(columns), values=', '.join(values))
-    print(command)
     execute_command(cursor, command)
     
     
@@ -57,21 +56,20 @@ def update_row(cursor, table, columns, values, condition):
         table=table,
         setup=', '.join([columns[idx] + " = " + values[idx] for idx in range(len(columns))]),
         condition=condition)
-    print(command)
     execute_command(cursor, command)
     
     
 def delete_row(cursor, table, condition):
     command = """DELETE FROM {table} WHERE {condition};""".format(
         table=table, condition=condition)
-    print(command)
     execute_command(cursor, command)
     
 
-def select_rows(cursor, table, condition):
-    command = """SELECT * FROM {table} WHERE {condition};""".format(
-        table=table, condition=condition)
-    print(command)
+def select_rows(cursor, table, condition=None):
+    if condition is None:
+        command = """SELECT * FROM {table};""".format(table=table)
+    else:
+        command = """SELECT * FROM {table} WHERE {condition};""".format(table=table, condition=condition)
     execute_command(cursor, command)
     rows = cursor.fetchall()
     return rows

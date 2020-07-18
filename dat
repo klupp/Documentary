@@ -20,8 +20,7 @@ create)
 	;;
 add-page)
     {
-        python $BASEDIR/create_page_script.py "$@" &&
-        echo "New page added"
+        python $BASEDIR/create_page_script.py "$@"
 	} ||
     {
         echo "Exception occurred"
@@ -29,8 +28,7 @@ add-page)
     ;;
 remove-page)
     {
-        python $BASEDIR/remove_page_script.py "$@" &&
-        echo "Remove page $2"
+        python $BASEDIR/remove_page_script.py "$@"
 	} ||
     {
         echo "Exception occurred"
@@ -38,8 +36,7 @@ remove-page)
     ;;
 add-datasource)
     {
-        python $BASEDIR/load_data_script.py "$@" &&
-        echo "Loading data $2"
+        python $BASEDIR/load_data_script.py "$@"
 	} ||
     {
         echo "Exception occurred"
@@ -47,17 +44,15 @@ add-datasource)
     ;;
 remove-datasource)
     {
-        python $BASEDIR/load_data_script.py "$@" &&
-        echo "Loading data $2"
+        python $BASEDIR/load_data_script.py "$@"
 	} ||
     {
         echo "Exception occurred"
     }
     ;;
-reload-datasource-one)
+reload-datasources)
     {
-        python $BASEDIR/reload_data_one_script.py "$@" &&
-        echo "Loading data $2"
+        python $BASEDIR/reload_data_script.py "$@"
 	} ||
     {
         echo "Exception occurred"
