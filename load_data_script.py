@@ -14,7 +14,7 @@ parser.add_argument('-u', '--update', action='store_true')
 
 
 @dat_project
-def main(path, req_name, update):
+def load_data(path, req_name, update):
     os.chdir("./.dat")
 
     name = Path(path).stem
@@ -26,6 +26,10 @@ def main(path, req_name, update):
     data_source_service.load_datasource(path, name, update_terminal_question(update))
 
 
+def main(args):
+    load_data(args.path, args.name, args.update)
+
+
 if __name__ == "__main__":
     args = parser.parse_args()
-    main(args.path, args.name, args.update)
+    main(args)

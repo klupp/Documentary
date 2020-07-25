@@ -10,7 +10,7 @@ parser.add_argument("-p", "--position", help="The position of the page to be rem
 
 
 @dat_project
-def main(position):
+def remove_page(position):
     os.chdir("./.dat")
     
     last_page = properties.read_property('', 'lastPage')
@@ -28,8 +28,12 @@ def main(position):
         sqlite.execute_command(cursor, command.format(position = position))
     sqlite.close_connection(connection)
     properties.update_property('', "lastPage", last_page - 1)
-    
+
+
+def main(args):
+    remove_page(args.position)
+
 
 if __name__ == "__main__":
     args = parser.parse_args()
-    main(args.position)
+    main(args)

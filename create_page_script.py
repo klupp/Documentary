@@ -11,7 +11,7 @@ parser.add_argument("-f", "--format", help="Format of the page.", choices=['A4']
 
 
 @dat_project
-def main(req_position, page_format):
+def create_page(req_position, page_format):
     # setup the current directory to be .dat
     os.chdir("./.dat")
 
@@ -35,6 +35,10 @@ def main(req_position, page_format):
     properties.update_property('', "lastPage", last_page + 1)
 
 
+def main(args):
+    create_page(args.position, args.format)
+
+
 if __name__ == "__main__":
     args = parser.parse_args()
-    main(args.position, args.format)
+    main(args)
