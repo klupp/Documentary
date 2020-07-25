@@ -1,4 +1,4 @@
-from plac_core import ArgumentParser
+from argparse import ArgumentParser
 
 from services.project_service import ProjectService
 
